@@ -10,8 +10,42 @@ Sổ tay cho gia sư: quản lý học sinh, lịch dạy theo tháng, theo dõi
 - Tiến độ học tập: bảng theo dõi (ngày, môn, % BTVN, nội dung, BTVN, lưu ý)
 - Tính học phí theo tháng hoặc khoảng ngày, xuất thông báo kèm mã QR
 
-## Cấu trúc
-Toàn bộ web nằm trong một file `index.html` (HTML + CSS + JavaScript), không cần build.
+## Cấu trúc thư mục
+Web tĩnh, không cần build: mở `index.html` là chạy.
+
+```
+.
+├── index.html            # Khung trang, nạp CSS và các file JS theo thứ tự
+├── css/
+│   └── styles.css        # Toàn bộ giao diện (màu, chữ, bố cục, chế độ tối, mobile)
+├── js/
+│   ├── config.js         # URL + khóa công khai của Supabase
+│   ├── core/
+│   │   ├── helpers.js    # Hàm tiện ích: DOM, ngày tháng, tiền tệ, icon, toast
+│   │   ├── storage.js    # Đọc/ghi dữ liệu: Supabase, Claude hoặc localStorage
+│   │   ├── auth.js       # Khóa dữ liệu, phiên đăng nhập (chế độ local)
+│   │   ├── state.js      # Trạng thái ứng dụng, dữ liệu theo tháng
+│   │   └── sessions.js   # Sinh buổi học từ lịch tuần, trạng thái, dạy bù
+│   ├── ui/
+│   │   ├── modal.js      # Hộp thoại
+│   │   ├── auth-view.js  # Màn hình đăng nhập / đăng ký / quên mật khẩu
+│   │   └── shell.js      # Khung app: menu, điều hướng
+│   ├── views/
+│   │   ├── home.js       # Tổng quan
+│   │   ├── calendar.js   # Lịch dạy
+│   │   ├── students.js   # Học sinh
+│   │   ├── session.js    # Hộp thoại buổi học, dạy bù
+│   │   ├── income.js     # Thu nhập
+│   │   ├── progress.js   # Tiến độ học tập (bảng theo dõi)
+│   │   ├── fee.js        # Học phí + thông báo kèm QR
+│   │   └── settings.js   # Cài đặt, sao lưu
+│   └── main.js           # Sự kiện chung + khởi động app (nạp cuối cùng)
+├── supabase/
+│   └── schema.sql        # Bảng dữ liệu + quy tắc bảo mật trên Supabase
+└── render.yaml           # Cấu hình deploy Render (static site)
+```
+
+Các file JS là script thường (không dùng bundler), dùng chung phạm vi toàn cục nên **thứ tự `<script>` trong `index.html` phải giữ nguyên**: `config` → `core` → `ui` → `views` → `main`.
 
 ## Backend: Supabase
 - **Đăng nhập:** Supabase Auth (email + mật khẩu, xác nhận email, quên mật khẩu).
